@@ -44,7 +44,7 @@ function ArticleView({ article, onClose }) {
                         <IoIosBookmark size={40} color="#2b90ee" />
                         <em className="bold">Article</em>Search
                     </h1>
-                    <h2 className="authors">by Group 10</h2>
+                    <h2 className="authors">by Isaya Danice</h2>
                 </div>
 
                 <img
