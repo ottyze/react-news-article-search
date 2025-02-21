@@ -18,27 +18,24 @@ const TimeFormatter = new Intl.DateTimeFormat(undefined, {
  * @param {ArticleCardProps} props
  * @returns {React.JSX.Element}
  */
-export default function ArticleCard({ article, onClick }) {
+export default function ArticleCard({ article }) {
     const date = new Date(article.published_date);
 
     return (
         <button
             className="card"
-            onClick={() => {
-                if (onClick) onClick(article);
-            }}
+            onClick={() => window.open(article.link, "_blank")}
         >
             <div className="thumbnail">
                 <p className="topic">{article.topic}</p>
-
                 <img
                     className="picture"
                     src={article.large_image_url}
-                    alt="Article Picture"
+                    alt=""
                 />
             </div>
             <div className="content">
-                <a className="url" href={article.link} target={"_blank"}>
+                <a className="url" href={article.link} target={"_blank"} rel="noopener noreferrer">
                     {article.domain}
                 </a>
                 <p className="title">{article.title}</p>
