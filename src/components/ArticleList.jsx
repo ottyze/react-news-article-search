@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, useCallback } from "react";
 
 import ArticleCard from "./ArticleCard";
 import { UserContext } from "./User";
@@ -19,14 +19,13 @@ import {
  *
  * @param {{searchLevel: string}} props
  */
-export default function ArticleList({ searchLevel, onSelectArticle }) {
-    const { preferences, setPreferences } = useContext(UserContext);
+export default function ArticleList({ searchLevel }) {
+    const { preferences } = useContext(UserContext);
     /**
      * @type {[ArticleData[], React.Dispatch<React.SetStateAction<ArticleData[]>>]}
      */
     const [articles, setArticles] = useState([]);
-
-    const [filteredArticles, setFilteredArticles] = useState([])
+    const [filteredArticles, setFilteredArticles] = useState([]);
 
     /**
      * Calculate the stats for each article
@@ -59,11 +58,11 @@ export default function ArticleList({ searchLevel, onSelectArticle }) {
         });
     }, []);
 
-    // Filter articles based on selected categories
-    const filterArticles = () => {
+    // Memoized filterArticles function using useCallback
+    const filterArticles = useCallback(() => {
         console.log(`level: ${searchLevel}`, preferences);
         const preferenceSelected = Object.values(preferences).some((v) => v);
-        console.log(preferenceSelected)
+        console.log(preferenceSelected);
 
         const filtered = articles
             .filter(
@@ -77,18 +76,17 @@ export default function ArticleList({ searchLevel, onSelectArticle }) {
             );
 
         return filtered;
-    };
+    }, [preferences, searchLevel, articles]);
 
     useEffect(() => {
-        const filteredArticles = filterArticles()
-
-        setFilteredArticles(filteredArticles)
-    }, [preferences, searchLevel, articles])
+        const filteredArticles = filterArticles();
+        setFilteredArticles(filteredArticles);
+    }, [filterArticles]);
 
     return (
         <>
             {filteredArticles.map((a, i) => (
-                <li key={`article_${i}`} onClick={() => onSelectArticle(a)}>
+                <li key={`article_${i}`}>
                     <ArticleCard article={a} />
                 </li>
             ))}
